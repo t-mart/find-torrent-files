@@ -52,7 +52,9 @@ of missing data are acceptable (10 MiB by default, configurable).
    - **hardlink** the torrent's data files to the `--client-download-dir`
      directory with proper naming, and
    - directory structure, and the torrent file is moved to the
-     `--matched-torrents-dir` directory for import into your torrent client.
+     `--matched-torrents-dir` directory for import into your torrent client. If
+     this option is not set, matched torrent files are moved to the
+     `./matched-torrents` directory in the current working directory.
 
    **If `--dry-run` is set, no data files are hardlinked nor torrent files
    moved.**
