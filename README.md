@@ -32,7 +32,8 @@ missing data are acceptable (50 MiB by default, configurable).
    you've copied/moved/renamed the file, passed with `--search-dir` one or more
    times) for files that match the torrent file size.
 
-   File size retrieval is super fast, so this quickly narrows down candidates.
+   File size retrieval is super fast, so this quickly narrows down candidates
+   without regards to arbitrary file names.
 
    If most of the data of the torrent is found, the file is considered a
    _size-match_. (Defaults to at most 50 MiB of missing files, but can be
