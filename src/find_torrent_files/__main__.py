@@ -24,9 +24,9 @@ def find_cli(
   ],
   matched_torrents_dir: Annotated[
     Path,
-    typer.Option(help="Directory to store matched torrents"),
+    typer.Option(help="Directory to which matched torrents are moved"),
   ] = Path("./matched-torrents"),
-  fail_threadhold_bytes: Annotated[
+  fail_threshold_bytes: Annotated[
     int,
     typer.Option(help="Threshold in bytes for missing files to fail"),
   ] = 50 * 1024 * 1024,
@@ -52,7 +52,7 @@ def find_cli(
   find_torrents(
     search_dirs=search_dir,
     client_download_dir=client_download_dir,
-    fail_threadhold_bytes=fail_threadhold_bytes,
+    fail_threshold_bytes=fail_threshold_bytes,
     torrents_dir=torrents_dir,
     matched_torrents_dir=matched_torrents_dir,
     dry_run=dry_run,

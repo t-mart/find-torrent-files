@@ -119,7 +119,7 @@ def find_torrent(
   data_dir_sizes: dict[int, list[Path]],
   torrent_file: Path,
   client_download_dir: Path,
-  fail_threadhold_bytes: int,
+  fail_threshold_bytes: int,
   matched_torrents_dir: Path,
   dry_run: bool = False,
   show_progress: bool = False,
@@ -145,8 +145,8 @@ def find_torrent(
     f"({missing_bytes_count / torrent.size:.2%})"
   )
 
-  human_fail_threadhold_bytes = humanize.naturalsize(fail_threadhold_bytes, binary=True)
-  if missing_bytes_count > fail_threadhold_bytes:
+  human_fail_threadhold_bytes = humanize.naturalsize(fail_threshold_bytes, binary=True)
+  if missing_bytes_count > fail_threshold_bytes:
     print(
       f"❌ Skipping torrent due to missing > {human_fail_threadhold_bytes}: "
       f"{humanize.naturalsize(missing_bytes_count, binary=True)}"
@@ -164,7 +164,7 @@ def find_torrent(
     f"({mismatched_pieces / total_pieces:.2%})"
   )
 
-  if mismatched_pieces_bytes > fail_threadhold_bytes:
+  if mismatched_pieces_bytes > fail_threshold_bytes:
     print(
       f"❌ Skipping torrent due to missing pieces > {human_fail_threadhold_bytes}: "
       f"{humanize.naturalsize(mismatched_pieces_bytes, binary=True)}"
@@ -185,7 +185,7 @@ def find_torrent(
 def find_torrents(
   search_dirs: list[Path],
   client_download_dir: Path,
-  fail_threadhold_bytes: int,
+  fail_threshold_bytes: int,
   torrents_dir: Path,
   matched_torrents_dir: Path,
   dry_run: bool = False,
@@ -201,7 +201,7 @@ def find_torrents(
         data_dir_sizes=data_dir_sizes,
         torrent_file=torrent_file,
         client_download_dir=client_download_dir,
-        fail_threadhold_bytes=fail_threadhold_bytes,
+        fail_threshold_bytes=fail_threshold_bytes,
         matched_torrents_dir=matched_torrents_dir,
         dry_run=dry_run,
         show_progress=show_progress,
