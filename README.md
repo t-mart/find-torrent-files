@@ -33,7 +33,9 @@ missing data are acceptable (50 MiB by default, configurable).
    times) for files that match the torrent file size.
 
    File size retrieval is super fast, so this quickly narrows down candidates
-   without regards to arbitrary file names.
+   without regards to arbitrary file names. For large enough files, the chance
+   of false-positive collisions is super low -- we're talking billions of bytes
+   here.
 
    If most of the data of the torrent is found, the file is considered a
    _size-match_. (Defaults to at most 50 MiB of missing files, but can be
