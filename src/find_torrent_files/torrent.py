@@ -1,10 +1,13 @@
-from typing import Iterator, IO
-import bencodepy
+from typing import Iterator
 from pathlib import Path
 from dataclasses import dataclass
-from .nullio import NullBytesIO
 import hashlib
 import math
+
+import bencodepy
+from rich.progress import track
+
+from find_torrent_files.nullio import NullBytesIO
 
 
 @dataclass
@@ -70,20 +73,16 @@ class Torrent:
   def size(self) -> int:
     return sum(file.length for file in self.files)
 
-  def check_pieces(self, file_mappings: list[FileMapping]) -> Iterator[bool]:
-    """
-    Checks the integrity of the torrent pieces against their SHA-1 hashes.
-    Args:
-        file_mappings: A list of FileMapping objects that map torrent files to their
-                       corresponding filesystem paths. To allow for missing files,
-                       the mapping can omit entries for files that are unavailable. In
-                       this case, the piece will be checked against null bytes.
-
-    Yields:
-        bool: True if the piece matches the expected hash, False otherwise.
-    """
+  def check_pieces(
+    self, file_mappings: list[FileMapping], show_progress: bool = False
+  ) -> Iterator[bool]:
     piece_reader = PieceReader.from_torrent(self, file_mappings)
-    for piece_index, piece in enumerate(piece_reader.read()):
+    for piece_index, piece in track(
+      enumerate(piece_reader.read()),
+      description="Hashing and checking pieces",
+      disable=not show_progress,
+      total=len(self.pieces),
+    ):
       yield hashlib.sha1(piece).digest() == self.pieces[piece_index]
 
 
@@ -161,19 +160,3 @@ class PieceReader:
 
     if buffer:
       yield bytes(buffer)
-
-
-if __name__ == "__main__":
-  import sys
-
-  if len(sys.argv) != 2:
-    print("Usage: python torrent.py <torrent_file_path>")
-    sys.exit(1)
-
-  torrent_file_path = Path(sys.argv[1])
-  torrent = Torrent.from_file(torrent_file_path)
-  print(f"Torrent Name: {torrent.name}")
-  print(f"Total Size: {torrent.size} bytes")
-  print(f"Number of Files: {len(torrent.files)}")
-  for file in torrent.files:
-    print(f" - {file.path}: {file.length} bytes")

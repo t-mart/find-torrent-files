@@ -1,17 +1,26 @@
 [project]
 name = "find-torrent-files"
 version = "0.1.0"
-description = "Add your description here"
+description = "Helps you find torrent data files in your filesystem after copy/deletion/renaming "
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = ["bencodepy>=0.9.5", "humanize>=4.12.3", "xxhash>=3.5.0"]
-
+dependencies = [
+    "bencodepy>=0.9.5",
+    "humanize>=4.12.3",
+    "rich>=14.1.0",
+    "typer>=0.16.0",
+    "xxhash>=3.5.0",
+]
 
 [tool.ruff]
 line-length = 88
 indent-width = 2
 
 [dependency-groups]
-dev = [
-    "ruff>=0.12.7",
-]
+dev = ["ruff>=0.12.7"]
+
+[tool.uv]
+package = true
+
+[project.scripts]
+find-torrent-files = "find_torrent_files.__main__:main"
