@@ -4,22 +4,23 @@ A Python script for finding torrent file data in a filesystem.
 
 Imagine you've:
 
-1. downloaded a torrent containing a large file (e.g., a multi-gigabyte movie),
-2. copied/moved/renamed the large file somewhere in your filesystem, and
+1. downloaded a torrent containing large files (e.g., a movie, season of a TV
+   show, etc.),
+2. copied/moved/renamed the file somewhere in your filesystem, and
 3. deleted the files from your torrent client's download directory.
 
 Well, now you're in a pickle if you want to re-add this torrent to your client.
-You don't know where the large file is and you don't want to re-download the
-whole thing (your ratio is already low enough). You may be able to do this
-manually for a few torrents, but what if you have hundreds?
+You don't know where the files are and you don't want to re-download the whole
+thing (your ratio is already low enough). You may be able to do this manually
+for a few torrents, but what if you have hundreds?
 
 Or, you may have gotten rid of some small supplemental files (e.g., `.nfo` or
-subtitle files) but still have the large file somewhere on your system. These
+subtitle files) but still have the large files somewhere on your system. These
 are tolerable to redownload (by my standards).
 
-**Enter `find-torrent-files`**: This script helps you find the large file in
-your filesystem and verify that it matches the torrent's metadata. Small amounts
-of missing data are acceptable (10 MiB by default, configurable).
+**Enter `find-torrent-files`**: This script helps you find the files in your
+filesystem and verify that they match the torrent's metadata. Small amounts of
+missing data are acceptable (50 MiB by default, configurable).
 
 ## How it works
 
@@ -28,20 +29,20 @@ of missing data are acceptable (10 MiB by default, configurable).
    option.
 
 2. For each file in each torrent, look in the search directories (i.e., where
-   you've copied/moved/renamed the large file, passed with `--search-dir` one or
-   more times) for files that match the torrent file size.
+   you've copied/moved/renamed the file, passed with `--search-dir` one or more
+   times) for files that match the torrent file size.
 
    File size retrieval is super fast, so this quickly narrows down candidates.
 
    If most of the data of the torrent is found, the file is considered a
-   _size-match_. (Defaults to at most 10 MiB of missing files, but can be
+   _size-match_. (Defaults to at most 50 MiB of missing files, but can be
    configured with `--fail-threshold-bytes`.)
 
 3. Continuing with each _size-matched_ torrent, compare the files by piece using
    their SHA1 hashlist (this is how bittorrent checks integrity).
 
    If most of the pieces' hashes match, the torrent is considered a
-   _hash-match_. (Defaults to 10 MiB worth of missing pieces, but can be
+   _hash-match_. (Defaults to 50 MiB worth of missing pieces, but can be
    configured with `--fail-threshold-bytes`.) Note that this step takes a long
    time.
 
